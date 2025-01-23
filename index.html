@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  </head>
+  <body>
+
+    <div class="parent">
+
+        <div class="child display-total">
+            <span id="disp">0</span>
+        </div>
+
+          <button class="child same-to-bg highlight" style="justify-self: start; margin-left: 30PX;">DEG</button>
+          <button class="child same-to-bg highlight" style="justify-self: start; margin-left: 20PX;">F-E</button>
+          <div class="extra1 same-to-bg highlight"></div>
+          <button class="child same-to-bg highlight mclear" style="opacity: .4;" disabled>MC</button>
+          <button class="child same-to-bg highlight mrecall" style="opacity: .4;" disabled>MR</button>
+          <button class="child same-to-bg highlight" onclick="memoryAdd(event)">M+</button>
+          <button class="child same-to-bg highlight" onclick="memorySubtract(event)">M-</button>
+          <button class="child same-to-bg highlight" onclick="memoryStore(event)">MS</button>
+          <button class="child tri same-to-bg"><span style="font-size: 36px;">&#9727;</span>&nbsp; Trigonometry <span style="font-size: 36px; font-weight: 100;">&#8964;</span>	</button>
+          <button class="child function same-to-bg"> <span style="font-size: 32px; font-style: italic; font-weight: 100;">ƒ</span>  &nbsp;&nbsp;&nbsp;&nbsp; Function 	<span style="font-size: 36px; font-weight: 100;">&#8964;</span></button>
+          <div class="extra2 same-to-bg"></div>
+
+          <button class="child defer">2<sup>nd</sup></button>
+          <button class="child defer">π</button>
+          <button class="child defer">e</button>
+          <button class="child defer" value = "0" onclick="removeAll()">C</button>
+          <button class="child defer" onclick="eraseOne()">⌫</button>
+          <button class="child defer" value="^" onclick="addValue(value)">x²</button>
+          <button class="child defer" value="1/" onclick="addValue(value)"><sup>1</sup>/<sub>x</sub></button>
+          <button class="child defer">|&nbsp;x&nbsp;|</button>
+          <button class="child defer">exp</button>
+          <button class="child defer" value="%" onclick="addValue(value)">mod</button>
+          <button class="child defer">&#8730;x</button>
+          <button class="child defer" value="(" onclick="addValue(value)">(</button>
+          <button class="child defer" value=")" onclick="addValue(value)">)</button>
+          <button class="child defer" value="!" onclick="addValue(value)">n!</button>
+          <button class="child defer" value="/" onclick="addValue(value)"><span style="font-size: 36px;">&divide;</span></button>
+          <button class="child defer">x<sup>y</sup></button>
+          <button class="child defer number" value="7" onclick="addValue(value)">7</button>
+          <button class="child defer number" value="8" onclick="addValue(value)">8</button>
+          <button class="child defer number" value="9" onclick="addValue(value)">9</button>
+          <button class="child defer" value="*" onclick="addValue(value)"><span style="font-size: 36px;">&#215;</span></button>
+          <button class="child defer">10<sup>x</sup></button>
+          <button class="child defer number" value="4" onclick="addValue(value)">4</button>
+          <button class="child defer number" value="5" onclick="addValue(value)">5</button>
+          <button class="child defer number" value="6" onclick="addValue(value)">6</button>
+          <button class="child defer" value="-" onclick="addValue(value)"><span style="font-size: 36px;">&minus;</span></button>
+          <button class="child defer">log</button>
+          <button class="child defer number" value="1" onclick="addValue(value)">1</button>
+          <button class="child defer number" value="2" onclick="addValue(value)">2</button>
+          <button class="child defer number" value="3" onclick="addValue(value)">3</button>
+          <button class="child defer" value="+" onclick="addValue(value)"><span style="font-size: 36px;">&plus;</span></button>
+          <button class="child defer">ln</button>
+          <button class="child defer" style="background-color: #fcfcfc;"><sup style="font-size: 24px;">&plus;</sup>/<sub style="font-size: 24px;">&minus;</sub> </button>
+          <button class="child defer number" value="0" onclick="addValue(value)">0</button>
+          <button class="child defer" value="." onclick="addValue(value)" style="background-color: #fcfcfc;">.</button>
+          <button class="child defer" style="background-color: #92c2e8;" onclick="calculate()"><span style="font-size: 36px;">=</span></button>
+
+    </div>    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="script.js"></script>
+
+  </body>
+
+
+</html>
