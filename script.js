@@ -4,6 +4,9 @@ const output = document.getElementById('disp')
 let outputDisplay = document.querySelector('#disp')
 let outputValue = output.textContent
 
+mstore = document.querySelector('.mstore')
+mplus = document.querySelector('.mplus')
+msubtract = document.querySelector('.msubtract')
 mclear = document.querySelector('.mclear');
 mrecall = document.querySelector('.mrecall');
 
@@ -189,58 +192,40 @@ function addPoint(val) {
 
 // ++++++++++++++++ Adding Memory Add +++++++++++++++
 
-const memoryAdd = () => {
-    let tempVar = parseFloat(outputValue.textContent);
-    if (!isNaN(tempVar)) {
-        storeM = storeM + tempVar;
-        // enableBTN()
-        console.log(storeM);
-        
-    }
-};
+mstore.addEventListener('click', (e) => {
+    storeM = outputValue;
+    console.log(storeM);
+    // mclear.removeAttribute('disabled');
+    // mrecall.removeAttribute('disabled');
+
+})
+
+mplus.addEventListener('click', (e) => {
+    storeM = Number(storeM) + Number(outputValue);
+    console.log(storeM);
+    
+})
+
+msubtract.addEventListener('click', (e) => {
+    storeM = Number(storeM) - Number(outputValue);
+    console.log(storeM);
+    
+})
 
 
-const memorySubtract = () => {
-    let tempVar = parseFloat(outputValue.textContent);
-    if (!isNaN(tempVar)) {
-        storeM = storeM - tempVar;
-        // enableBTN()
-        console.log(storeM);
-        
-    }
-};
 
 
-const memoryStore = () => {
-    let tempVar = parseFloat(outputValue.textContent);
-    if (!isNaN(tempVar)) {
-        storeM = tempVar;
-        // enableBTN()
-        console.log(outputValue);
-        
-        console.log(storeM);
-        
-    }
-};
-
-// const enableBTN = (e)=>{
-//     if (storeM != 0){
-//         mclear.disabled=false;
-//         mrecall.disabled=false;
-//     }
-// }
-
-
+// ++++++++++++ Handled erase +++++++++++++
 function eraseOne() {
     outputValue = outputValue.substring(0, outputValue.length-1)
     outputDisplay.textContent = outputValue
 }
 
+// ++++++++++++ Handled removeAll ++++++++++++++
 function removeAll() {
     outputValue = ' ';
     outputDisplay.textContent = outputValue;
 }
-
 
 
 
@@ -267,11 +252,12 @@ window.addEventListener('keypress', (e) => {
 
     else if(e.key == '+' || e.key == '-' || e.key == '*' || e.key == '/' || e.key == 'Enter' || e.key == '%' || e.key == 'Backspace') {
         
-        if(e.key == 'Enter') {
+        if(e.key === 'Enter') {
             console.log(e.key);
             calculate();
         }
-        else if(e.key == 'Backspace') {
+        else if(e.key === 'Backspace') {
+            console.log(e.key);          
             eraseOne();
         }
         else if(e.key == '/') {
@@ -293,12 +279,13 @@ function calculate () {
         outputValue = outputValue.replaceAll('^', '**');
         outputValue = eval(outputValue);
         if(`${outputValue}`.indexOf('.') !== -1) {
-            outputValue = Number(outputValue).toFixed(3);
+            outputValue = Number(outputValue).toFixed(2);
         }
         outputDisplay.textContent = outputValue;
     } 
     catch (error) {
         outputValue = 'Error';
         outputDisplay.textContent = outputValue;
+        // alert("Error");
     }
 }
