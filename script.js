@@ -1,291 +1,188 @@
-const btn = document.querySelector('body')
+// Selectors
+const btn = document.querySelector('body');
+let outputDisplay = document.querySelector('#disp');
+let outputValue = outputDisplay.textContent;
 
-const output = document.getElementById('disp')
-let outputDisplay = document.querySelector('#disp')
-let outputValue = output.textContent
-
-mstore = document.querySelector('.mstore')
-mplus = document.querySelector('.mplus')
-msubtract = document.querySelector('.msubtract')
-mclear = document.querySelector('.mclear');
-mrecall = document.querySelector('.mrecall');
+const mstore = document.querySelector('.mstore');
+const mplus = document.querySelector('.mplus');
+const msubtract = document.querySelector('.msubtract');
+const mclear = document.querySelector('.mclear');
+const mrecall = document.querySelector('.mrecall');
 
 let storeM = 0;
 let dotFlag = true;
 
-
-// const selectedItem = document.querySelector('.display-total');
-// console.log(selectedItem);
+// console.log(outputValue);
 
 
-
+// Utility Functions
 function checkDigitAtLast() {
-    // console.log(outputValue);
-    
-    let lastDigit = outputValue.at(-1);
-    // console.log(lastDigit);
-    
-    if (lastDigit >= 48 && lastDigit <= 57) {
-        return true;
-    }
-    return false;
+    const lastDigit = outputValue.at(-1);
+    return lastDigit >= '0' && lastDigit <= '9';
 }
 
-
-function addValue(val) {
-    
-    // To handle the case where entered first letter replaces initial 0
-    if(outputValue == '0') {
-        replaceInitialZero(val);
-    }
-    else if(val == '.') {   
-        addPoint(val);
-    }
-    else if(val == '^') {       
-        squareEvent(val);   
-    }
-    else if(val === '1/') {
-        divideByOne(val);
-    }
-    else{
-        if(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].includes(`${val}`)) {
-            
-            outputValue = outputValue + `${val}`;
-            outputDisplay.textContent = outputValue;
-
-        }
-        else {
-
-            outputValue = outputValue + `${val}`;
-            dotFlag = true;
-            outputDisplay.textContent = outputValue;
-
-        }
-    }
-}
-
-
-
-function replaceInitialZero(val) {   
+function updateOutput(val) {
     outputValue = val;
     outputDisplay.textContent = outputValue;
 }
 
+function addValue(val) {
+    if (outputValue === '0') {
+        replaceInitialZero(val);
+    } else if (val === '.') {
+        addPoint(val);
+    } else if (val === '^') {
+        squareEvent(val);
+    } else if (val === '1/') {
+        divideByOne(val);
+    } else {
+        // To handle "dot should repeat after operator" 
+        if(checkDigitAtLast()){
+            dotFlag = true;
+        }
+        outputValue += val;
+        updateOutput(outputValue);
+    }
+}
 
-// +++++++++++++++ Square function handled ++++++++++++++++
+function replaceInitialZero(val) {
+    if(val !== '^' && val !== '+' && val !== '*' && val !== '/' && val !== '%' && val !== '1/') {
+        updateOutput(val);
+    }
+}
+
+
+// ++++++++ Square ++++++++++
 function squareEvent(val) {
+    const operators = ['+', '-', '*', '/', '%', '('];
+    // console.log(outputValue);
     
-    const checker = ['+', '-', '*', '/', '%', '('];
-    let currentIndex = -1;
-    // console.log(outputValue[outputValue.length-1]);
-
-    console.log(outputValue);
-    if (checker.includes(outputValue[outputValue.length - 1])) {
-
+    if (operators.includes(outputValue.at(-1))) {        
+        return;
     }
-    else if(outputValue === '') {
-
+    else if (outputValue.at(-1) === ')') {
+        updateOutput(`${outputValue}^2`)
+        // calculate();
     }
-    else if(`${outputValue}` === '0') {
-        console.log('matched');
-        
-    }
-    else if (outputValue[outputValue.length - 1] == ')') {
-
-        calculate()
-        outputValue = outputValue + '^' + '2';
-        outputDisplay.textContent = outputValue;
-
-    }
-    else {
-
-        for (let i = outputValue.length - 1; i >= 0; i = i - 1) {
-
-            if (checker.includes(outputValue[i])) {
-                currentIndex = i;
-                break;
-            }
-
-            // else if (i == 0) {
-            //     // console.log(outputValue.length);      
-            //     outputValue = '(' + outputValue + `${val}` + '2';
-            //     outputDisplay.textContent = outputValue;
-            // } 
+    else if(!isNaN(outputValue)) {
+        let currentIndex = outputValue.length - 1;
+        while (currentIndex >= 0 && !operators.includes(outputValue[currentIndex])) {
+            currentIndex--;
         }
-
-        let preOutput = outputValue.slice(0, currentIndex + 1);
-        let nextOutput = outputValue.slice(currentIndex + 1, outputValue.length);
-        outputValue = preOutput + '(' + nextOutput + `${val}` + '2';
-        // console.log(outputValue[i+1]);
-        outputDisplay.textContent = outputValue;
+    
+        const preOutput = outputValue.slice(0, currentIndex + 1);
+        const nextOutput = outputValue.slice(currentIndex + 1);
+        updateOutput(`${preOutput}(${nextOutput}${val}2)`);
     }
-   
 }
 
 
-// +++++++++++ Handling DivideByOne ++++++++++++
+// ++++++++++ 1/X +++++++++++
 function divideByOne(val) {
-    
-    const checker = ['+', '-', '*', '/', '%', '('];
-    let currentIndex = -1;
-
-    if(checker.includes(outputValue[outputValue.length - 1])) {
-
-        for (let i = outputValue.length-1; i >= 0; i--) {
-
-            if (checker.includes(outputValue[i])) {
-                currentIndex = i;
-                break;
-            }
-
-        } 
-
-        let preOutput = outputValue.slice(0, currentIndex + 1);
-        let nextOutput = outputValue.slice(currentIndex + 1, outputValue.length);
-        outputValue = preOutput + '(' + `${val}`+ nextOutput;
-        outputDisplay.textContent = outputValue;
-
+    const operators = ['+', '-', '*', '/', '%', '('];
+    if (outputValue === '' || operators.includes(outputValue.at(-1))) {
+        return;
     }
-
-    else if(outputValue == '') {   
-
-        outputValue = `${val}` + outputValue;
-        outputDisplay.textContent = outputValue;
-
-    }
-
-    else {
-        
+    else if (!isNaN(outputValue)) {
+        let currentIndex = outputValue.length - 1;
+        while (currentIndex >= 0 && !operators.includes(outputValue[currentIndex])) {
+            currentIndex--;
+        }
+        const preOutput = outputValue.slice(0, currentIndex + 1);
+        const nextOutput = outputValue.slice(currentIndex + 1);
+        updateOutput(`${preOutput}(${val}${nextOutput})`);
     }
     
 }
 
 
-// ++++++++++++++ Handling points ++++++++++++++
+// ++++++++++ dot +++++++++++
 function addPoint(val) {
-
     if (dotFlag) {
-
-        const checker = ['+', '-', '*', '/', '%', '(', ')', '^'];
-
-
-        if (checker.includes(outputValue[outputValue.length - 1])) {
-
-            outputValue = outputValue + `0${val}`;
-            dotFlag = false;
-            outputDisplay.textContent = outputValue;
-
+        // console.log('entered');
+        const operators = ['+', '-', '*', '/', '%', '(', ')', '^'];
+        if (operators.includes(`${outputValue}`.at(-1))) {
+            updateOutput(`${outputValue}0${val}`);
+        } else {
+            updateOutput(`${outputValue}${val}`);
         }
-
-        else if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].includes(outputValue[outputValue.length - 1])) {
-         
-            outputValue = outputValue + `${val}`;
-            dotFlag = false;
-            outputDisplay.textContent = outputValue;
-
-        }
-
+        dotFlag = false;
     }
-
 }
 
+// Memory Operations
+mstore.addEventListener('click', () => {
+    storeM = parseFloat(outputValue);
+    console.log('Stored:', storeM);
+});
 
-// ++++++++++++++++ Adding Memory Add +++++++++++++++
+mplus.addEventListener('click', () => {
+    storeM += parseFloat(outputValue);
+    console.log('Added:', storeM);
+});
 
-mstore.addEventListener('click', (e) => {
-    storeM = outputValue;
-    console.log(storeM);
-    // mclear.removeAttribute('disabled');
-    // mrecall.removeAttribute('disabled');
+msubtract.addEventListener('click', () => {
+    storeM -= parseFloat(outputValue);
+    console.log('Subtracted:', storeM);
+});
 
-})
-
-mplus.addEventListener('click', (e) => {
-    storeM = Number(storeM) + Number(outputValue);
-    console.log(storeM);
-    
-})
-
-msubtract.addEventListener('click', (e) => {
-    storeM = Number(storeM) - Number(outputValue);
-    console.log(storeM);
-    
-})
-
-
-
-
-// ++++++++++++ Handled erase +++++++++++++
+// Erase Functions
 function eraseOne() {
-    outputValue = outputValue.substring(0, outputValue.length-1)
-    outputDisplay.textContent = outputValue
+    if(outputValue.at(-1) == '.') {
+        dotFlag = true
+        updateOutput(outputValue.slice(0, -1) || '0');
+    }
+    else {
+        updateOutput(outputValue.slice(0, -1) || '0');
+    }
 }
 
-// ++++++++++++ Handled removeAll ++++++++++++++
 function removeAll() {
-    outputValue = ' ';
-    outputDisplay.textContent = outputValue;
+    updateOutput('0');
+    dotFlag = true;
 }
 
-
-
-
-
-
-
-//+++++++++++++++ Handling keypress ++++++++++++++++++
+// Keypress Handling
 window.addEventListener('keypress', (e) => {
-    // console.log(e.key);
-    
-    if(e.keyCode >= 48 && e.keyCode <= 57){
+    const key = e.key;
 
-        // To handle the case where entered first letter replaces initial 0
-        if(outputDisplay.textContent === '0') {
-            replaceInitialZero(e.key)
+    if (!isNaN(key)) {
+        if (outputValue === '0') {
+            replaceInitialZero(key);
+        } else {
+            updateOutput(outputValue + key);
         }
-
-        else{
-            outputValue = outputValue + `${e.key}`;
-            outputDisplay.textContent = outputValue;
-        }
+    } else if ('+-*/%'.includes(key)) {
+        updateOutput(outputValue + key);
+    } else if (key === 'Enter') {
+        calculate();
     }
-
-    else if(e.key == '+' || e.key == '-' || e.key == '*' || e.key == '/' || e.key == 'Enter' || e.key == '%' || e.key == 'Backspace') {
-        
-        if(e.key === 'Enter') {
-            console.log(e.key);
-            calculate();
-        }
-        else if(e.key === 'Backspace') {
-            console.log(e.key);          
-            eraseOne();
-        }
-        else if(e.key == '/') {
-            e.preventDefault()
-            outputValue = outputValue + `${e.key}`;
-            outputDisplay.textContent = outputValue;    
-        }
-        else{
-            outputValue = outputValue + `${e.key}`;
-            outputDisplay.textContent = outputValue;    
-        }
+    //  else if (key === 'Backspace') {
+    //     eraseOne();
+    // } 
+    else if (key === '.') {
+        addPoint(key);
     }
-    //enter mar to = hona chahiye
-})
+});
 
-function calculate () {
-    
+// Calculation
+function calculate() {
     try {
         outputValue = outputValue.replaceAll('^', '**');
         outputValue = eval(outputValue);
+        
         if(`${outputValue}`.indexOf('.') !== -1) {
             outputValue = Number(outputValue).toFixed(2);
+            dotFlag = false;
+            updateOutput(outputValue);
         }
-        outputDisplay.textContent = outputValue;
-    } 
-    catch (error) {
-        outputValue = 'Error';
-        outputDisplay.textContent = outputValue;
-        // alert("Error");
+        else {
+            dotFlag = true;
+
+        }
+        updateOutput(outputValue);
+
+    } catch {
+        updateOutput('Error');
     }
 }
