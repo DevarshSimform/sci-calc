@@ -21,8 +21,7 @@ This is a feature-rich calculator built using JavaScript, HTML, and CSS. The cal
 ### Memory Functions
 - **M+**: Add the current value to memory.
 - **M-**: Subtract the current value from memory.
-- **MRC**: Recall the value stored in memory.
-- **MC**: Clear the memory.
+- **MS**: Store in memory
 
 ### Utility Functions
 - Erase one character.
