@@ -17,7 +17,7 @@ let dotFlag = true;
 
 // Utility Functions
 function checkDigitAtLast() {
-    const lastDigit = outputValue.at(-1);
+    const lastDigit = `${outputValue}`.at(-1);
     return lastDigit >= '0' && lastDigit <= '9';
 }
 
@@ -37,7 +37,7 @@ function addValue(val) {
         divideByOne(val);
     } else {
         // To handle "dot should repeat after operator" 
-        if(checkDigitAtLast()){
+        if (checkDigitAtLast()) {
             dotFlag = true;
         }
         outputValue += val;
@@ -46,7 +46,7 @@ function addValue(val) {
 }
 
 function replaceInitialZero(val) {
-    if(val !== '^' && val !== '+' && val !== '*' && val !== '/' && val !== '%' && val !== '1/') {
+    if (val !== '^' && val !== '+' && val !== '*' && val !== '/' && val !== '%' && val !== '1/') {
         updateOutput(val);
     }
 }
@@ -56,22 +56,21 @@ function replaceInitialZero(val) {
 function squareEvent(val) {
     const operators = ['+', '-', '*', '/', '%', '('];
     // console.log(outputValue);
-    
-    if (operators.includes(outputValue.at(-1))) {        
+
+    if (operators.includes(`${outputValue}`.at(-1))) {
         return;
     }
-    else if (outputValue.at(-1) === ')') {
+    else if (`${outputValue}`.at(-1) === ')') {
         updateOutput(`${outputValue}^2`)
         // calculate();
     }
-    else if(!isNaN(outputValue)) {
+    else if (!isNaN(outputValue)) {
         let currentIndex = outputValue.length - 1;
         while (currentIndex >= 0 && !operators.includes(outputValue[currentIndex])) {
             currentIndex--;
         }
-    
-        const preOutput = outputValue.slice(0, currentIndex + 1);
-        const nextOutput = outputValue.slice(currentIndex + 1);
+        const preOutput = `${outputValue}`.slice(0, currentIndex + 1);
+        const nextOutput = `${outputValue}`.slice(currentIndex + 1);
         updateOutput(`${preOutput}(${nextOutput}${val}2)`);
     }
 }
@@ -80,7 +79,7 @@ function squareEvent(val) {
 // ++++++++++ 1/X +++++++++++
 function divideByOne(val) {
     const operators = ['+', '-', '*', '/', '%', '('];
-    if (outputValue === '' || operators.includes(outputValue.at(-1))) {
+    if (outputValue === '' || operators.includes(`${outputValue}`.at(-1))) {
         return;
     }
     else if (!isNaN(outputValue)) {
@@ -88,18 +87,18 @@ function divideByOne(val) {
         while (currentIndex >= 0 && !operators.includes(outputValue[currentIndex])) {
             currentIndex--;
         }
-        const preOutput = outputValue.slice(0, currentIndex + 1);
-        const nextOutput = outputValue.slice(currentIndex + 1);
+        const preOutput = `${outputValue}`.slice(0, currentIndex + 1);
+        const nextOutput = `${outputValue}`.slice(currentIndex + 1);
         updateOutput(`${preOutput}(${val}${nextOutput})`);
     }
-    
+
 }
 
 
 // ++++++++++ dot +++++++++++
 function addPoint(val) {
     if (dotFlag) {
-        // console.log('entered');
+        // console.log('entered ');
         const operators = ['+', '-', '*', '/', '%', '(', ')', '^'];
         if (operators.includes(`${outputValue}`.at(-1))) {
             updateOutput(`${outputValue}0${val}`);
@@ -128,12 +127,12 @@ msubtract.addEventListener('click', () => {
 
 // Erase Functions
 function eraseOne() {
-    if(outputValue.at(-1) == '.') {
-        dotFlag = true
-        updateOutput(outputValue.slice(0, -1) || '0');
+    if (`${outputValue}`.at(-1) == '.') {
+        dotFlag = true;             // If erased element is dot then it should allow dot from now on
+        updateOutput(`${outputValue}`.slice(0, -1) || '0');
     }
     else {
-        updateOutput(outputValue.slice(0, -1) || '0');
+        updateOutput(`${outputValue}`.slice(0, -1) || '0');
     }
 }
 
@@ -170,15 +169,15 @@ function calculate() {
     try {
         outputValue = outputValue.replaceAll('^', '**');
         outputValue = eval(outputValue);
-        
-        if(`${outputValue}`.indexOf('.') !== -1) {
+
+        if (`${outputValue}`.indexOf('.') !== -1) {
             outputValue = Number(outputValue).toFixed(2);
-            dotFlag = false;
+            dotFlag = false;                // if there is dot in result then don't allow dot
             updateOutput(outputValue);
         }
         else {
+            // to enable if there is no dot in result then allow dot
             dotFlag = true;
-
         }
         updateOutput(outputValue);
 
