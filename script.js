@@ -13,10 +13,10 @@ let storeM = 0;
 let dotFlag = true;
 
 // Utility functions
-const isOperator = (char) => ['+', '-', '*', '/', '%', '(', ')', '^'].includes(char);
+const isOperator = (char) => ['+', '-', '*', '/', '%', '(', ')', '^', '.'].includes(char);
 const isDigit = (char) => char >= '0' && char <= '9';
 
-function updateDisplay(value) {
+function updateDisplay(value) {  
   outputValue = value;
   outputDisplay.textContent = outputValue;
 }
@@ -177,7 +177,7 @@ function eraseOne() {
 }
 
 function clearAll() {
-  updateDisplay('0');
+  updateDisplay('0', "Error Spotted");
 }
 
 function calculate() {
@@ -212,19 +212,19 @@ mstore.addEventListener('click', () => {
   mrecall.removeAttribute('disabled');
   mclear.classList.remove('opacityVal')
   mrecall.classList.remove('opacityVal')
-  console.log(storeM);
+  // console.log(storeM);
 
 });
 
 mplus.addEventListener('click', () => {
   storeM += parseFloat(outputValue);
-  console.log(storeM);
+  // console.log(storeM);
 
 });
 
 msubtract.addEventListener('click', () => {
   storeM -= parseFloat(outputValue);
-  console.log(storeM);
+  // console.log(storeM);
 
 });
 
@@ -232,17 +232,18 @@ mclear.addEventListener('click', () => {
   storeM = 0;
   mclear.classList.add('opacityVal')
   mrecall.classList.add('opacityVal')
-  console.log(storeM);
+  // console.log(storeM);
 });
 
 mrecall.addEventListener('click', () => {
   updateDisplay(storeM.toString());
-  console.log(storeM);
+  // console.log(storeM);
 
 });
 
 // Keyboard events
-window.addEventListener('keypress', (e) => {
+window.addEventListener('keydown', (e) => {       // Keypress is not working for Backspace
+  e.preventDefault()
   if (isDigit(e.key)) {
     if (outputValue === '0') {
       updateDisplay(e.key);
@@ -258,7 +259,7 @@ function handleSpecialKeyPress(e) {
   if (e.key === 'Enter') {
     calculate();
   } else if (e.key === 'Backspace') {
-    eraseLastCharacter();
+    eraseOne();
   } else {
     updateDisplay(outputValue + e.key);
   }
